@@ -1,14 +1,17 @@
 import curses
 from miscclasses import *
+import logging
 
 screen = curses.initscr()
 screen.clear()
 curses.noecho()
 screen.keypad(True)
 curses.cbreak()
+curses.start_color()
 curses.curs_set(0)
 player = Player()
 curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 
 def endApp():
 	curses.nocbreak()
@@ -17,9 +20,16 @@ def endApp():
 	curses.endwin()
 	quit()
 def draw():
-	screen.addch(player.y, player.x, str(player))
+	height, width = screen.getmaxyx()
+	for y in range(height):
+		for x in range(width):
+			if x == player.x and y == player.y:	
+				screen.addch(player.y, player.x, "π", curses.color_pair(2))
+			else:
+				screen.addch(y, x, "#", curses.color_pair(1))
 def doEvents():
 	key=screen.getch()
+	#TODO: fix player movement glitch
 	if key == ord('q'):
 		endApp()
 
