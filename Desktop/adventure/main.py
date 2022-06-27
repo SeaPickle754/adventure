@@ -7,8 +7,8 @@ curses.noecho()
 screen.keypad(True)
 curses.cbreak()
 curses.curs_set(0)
-
 player = Player()
+curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
 
 def endApp():
 	curses.nocbreak()
@@ -22,21 +22,25 @@ def doEvents():
 	key=screen.getch()
 	if key == ord('q'):
 		endApp()
-	#TODO: replace this with arrow keys
-	if key == ord('w'):
+
+	if key == curses.KEY_UP:
 		player.y -= 1
-	
-	if key == ord('s'):
+
+	if key == curses.KEY_DOWN:
 		player.y += 1
 	
-	if key == ord('a'):
+	if key == curses.KEY_LEFT:
 		player.x -= 1
 	
-	if key == ord('d'):
+	if key == curses.KEY_RIGHT:
 		player.x += 1
+
 while 1:
 	screen.clear()
-	draw()
+	try:
+		draw()
+	except:
+		doEvents()
 	doEvents()
 	screen.refresh()
 endApp()
