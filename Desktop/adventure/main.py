@@ -43,7 +43,10 @@ def draw():
 	for y in range(height):
 		for x in range(width):
 			if x == player.x and y == player.y:	
-				screen.addch(player.y, player.x, "λ", curses.color_pair(2))
+				try:
+					screen.addch(player.y, player.x, "λ", curses.color_pair(2))
+				except:
+					pass
 			else:
 				try:
 					if Map[page][y][x] == 0:
@@ -68,7 +71,7 @@ def doEvents():
 	elif key == curses.KEY_DOWN:
 		player.y += 1
 		
-		if player.y >= height-1:
+		if player.y >= height:
 			player.y -= 1
 	
 	elif key == curses.KEY_LEFT:
@@ -78,7 +81,7 @@ def doEvents():
 			player.x += 1
 	elif key == curses.KEY_RIGHT:
 		player.x += 1
-		if player.x >= width-1:
+		if player.x >= width:
 			player.x -= 1
 	return
 initMap()
