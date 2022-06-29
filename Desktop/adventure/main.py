@@ -5,7 +5,8 @@ screen = curses.initscr()
 #curses.noecho()
 screen.keypad(True)
 curses.cbreak()
-Map = dict()
+Map = None
+screen.scrollok(0)
 curses.start_color()
 curses.curs_set(0)
 page = 0
@@ -17,12 +18,16 @@ curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
 screen.addstr(height//2, width//2, "Press any key to start.")
 def initMap():
-	Map = dict()
-	for i in range(1, 5):
-		Map[i] = []
-		for y in range(height):
-			for x in range(width):
-				Map[i].append(0)
+	global Map
+	Map = list()
+	Map.append([])
+	# Must be a perfect square
+	for i in range(0, 8):
+		Map.append([]) # append a page
+		for y in range(0, height):
+			Map[i].append([]) #append a y-axis
+			for x in range(0, width):
+				Map[i][y].append(0)
 def endApp():
 	curses.nocbreak()
 	screen.keypad(False)
@@ -35,35 +40,45 @@ def draw():
 			if x == player.x and y == player.y:	
 				screen.addch(player.y, player.x, "λ", curses.color_pair(2))
 			else:
-				screen.addch(y, x, "-", curses.color_pair(1))
+				try:
+					if Map[page][y][x] == 0:
+						screen.addch(y, x, "-", curses.color_pair(1))
+				except:
+					pass
 def doEvents():
 	key=screen.getch()
 
-	#TODO: fix player movement glitch
 	if key == ord('q'):
 		endApp()
 
 	elif key == curses.KEY_UP:
 		player.y -= 1
-		return
+		if player.y <= 0:
+			if page == 0:
+				player.y += 1
+			else:
+				page -= 1
 
 	elif key == curses.KEY_DOWN:
 		player.y += 1
-		return
+		
+		if player.y >= height:
+			player.y -= 1
 	
 	elif key == curses.KEY_LEFT:
 		player.x -= 1
-		return
+		
+		if player.x <= 0:
+			player.x += 1
 	elif key == curses.KEY_RIGHT:
 		player.x += 1
-		return
+		if player.x >= width:
+			player.x -= 1
 	return
+initMap()
 while 1:
 	doEvents()
 	screen.clear()
-	try:
-		draw()
-	except:
-		continue
+	draw()
 	screen.refresh()
 endApp()
