@@ -1,5 +1,8 @@
 import curses
 from miscclasses import *
+import random
+
+#TODO: add page support
 
 screen = curses.initscr()
 #curses.noecho()
@@ -20,14 +23,16 @@ screen.addstr(height//2, width//2, "Press any key to start.")
 def initMap():
 	global Map
 	Map = list()
-	Map.append([])
 	# Must be a perfect square
 	for i in range(0, 8):
 		Map.append([]) # append a page
 		for y in range(0, height):
 			Map[i].append([]) #append a y-axis
 			for x in range(0, width):
-				Map[i][y].append(0)
+				if random.randint(0, 150) != 3:
+					Map[i][y].append(0)
+				else:
+					Map[i][y].append(1)
 def endApp():
 	curses.nocbreak()
 	screen.keypad(False)
@@ -43,6 +48,8 @@ def draw():
 				try:
 					if Map[page][y][x] == 0:
 						screen.addch(y, x, "-", curses.color_pair(1))
+					elif Map[page][y][x] == 1:
+						screen.addch(y, x, "@")
 				except:
 					pass
 def doEvents():
@@ -50,29 +57,28 @@ def doEvents():
 
 	if key == ord('q'):
 		endApp()
+	elif key == ord('a'):
+		initMap()
 
 	elif key == curses.KEY_UP:
 		player.y -= 1
-		if player.y <= 0:
-			if page == 0:
-				player.y += 1
-			else:
-				page -= 1
+		if player.y <= -1:
+			player.y += 1
 
 	elif key == curses.KEY_DOWN:
 		player.y += 1
 		
-		if player.y >= height:
+		if player.y >= height-1:
 			player.y -= 1
 	
 	elif key == curses.KEY_LEFT:
 		player.x -= 1
 		
-		if player.x <= 0:
+		if player.x <= -1:
 			player.x += 1
 	elif key == curses.KEY_RIGHT:
 		player.x += 1
-		if player.x >= width:
+		if player.x >= width-1:
 			player.x -= 1
 	return
 initMap()
