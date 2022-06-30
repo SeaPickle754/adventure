@@ -61,6 +61,102 @@ def isNonPassable():
 	if Map[page][player.y][player.x] in nonPassables:
 		return True
 	return False
+
+#dir:
+#0 = up
+#1 = left
+#2 = down
+#3 = right
+
+def checkPlayerPage(dir):
+	if page == 0:
+		if dir == 0:
+			return page
+		if dir == 1:
+			return page
+		if dir == 2:
+			return 3
+		if dir == 3:
+			return 1
+
+	if page == 1:
+		if dir == 0:
+			return page
+		if dir == 1:
+			return 0
+		if dir == 2:
+			return 4
+		if dir == 3:
+			return 2
+
+	if page == 2:
+		if dir == 0:
+			return page
+		if dir == 1:
+			return 1
+		if dir == 2:
+			return 5
+		if dir == 3:
+			return page
+
+	if page == 3:
+		if dir == 0:
+			return 0
+		if dir == 1:
+			return page
+		if dir == 2:
+			return 6
+		if dir == 3:
+			return 4
+
+	if page == 4:
+		if dir == 0:
+			return 1
+		if dir == 1:
+			return 3
+		if dir == 2:
+			return 7
+		if dir == 3:
+			return 5
+
+	if page == 5:
+		if dir == 0:
+			return 1
+		if dir == 1:
+			return 4
+		if dir == 2:
+			return 8
+		if dir == 3:
+			return page
+	
+	if page == 6:
+		if dir == 0:
+			return 3
+		if dir == 1:
+			return page
+		if dir == 2:
+			return page
+		if dir == 3:
+			return 7
+	if page == 7:
+		if dir == 0:
+			return 4
+		if dir == 1:
+			return 6
+		if dir == 2:
+			return page
+		if dir == 3:
+			return 8
+	if page == 8:
+		if dir == 0:
+			return 5
+		if dir == 1:
+			return 7
+		if dir == 2:
+			return page
+		if dir == 3:
+			return page
+	
 def doEvents():
 	global page
 	key=screen.getch()
@@ -77,7 +173,13 @@ def doEvents():
 	elif key == curses.KEY_UP:
 		player.y -= 1
 		if player.y <= -1:
-			player.y += 1
+			npage = checkPlayerPage(0)
+			if npage == page:
+				player.y += 1
+			else:
+				player.y = height-1
+				page = npage
+				return
 		if isNonPassable():
 			player.y += 1
 
@@ -86,7 +188,7 @@ def doEvents():
 		
 		if player.y >= height:
 			player.y -= 1
-
+			page = checkPlayerPage(2)
 		if isNonPassable():
 			player.y -= 1
 	
@@ -95,12 +197,14 @@ def doEvents():
 		
 		if player.x <= -1:
 			player.x += 1
+			page = checkPlayerPage(1)
 		if isNonPassable():
 			player.x += 1
 	elif key == curses.KEY_RIGHT:
 		player.x += 1
 		if player.x >= width:
 			player.x -= 1
+			page = checkPlayerPage(3)
 		if isNonPassable():
 			player.x -= 1
 	return
