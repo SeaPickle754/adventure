@@ -12,7 +12,6 @@ curses.cbreak()
 nonPassables = [1]
 Map = None
 
-screen.scrollok(0)
 curses.start_color()
 curses.curs_set(0)
 page = 0
@@ -32,10 +31,17 @@ def initMap():
 		for y in range(0, height):
 			Map[i].append([]) #append a y-axis
 			for x in range(0, width):
-				if random.randint(0, 150) != 3:
-					Map[i][y].append(0)
-				else:
+				struct = random.randint(0, 150)
+				if struct == 0:
 					Map[i][y].append(1)
+				elif struct == 1:
+					Map[i][y].append(2)
+				else:
+					Map[i][y].append(0)
+
+					
+					
+					
 def endApp():
 	curses.nocbreak()
 	screen.keypad(False)
@@ -56,6 +62,8 @@ def draw():
 						screen.addch(y, x, "-", curses.color_pair(1))
 					elif Map[page][y][x] == 1:
 						screen.addch(y, x, "@")
+					elif Map[page][y][x] == 2:
+						screen.addch(y, x, "#", curses.A_UNDERLINE)
 				except:
 					pass
 def isNonPassable():
