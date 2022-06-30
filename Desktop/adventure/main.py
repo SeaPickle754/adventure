@@ -182,8 +182,9 @@ def doEvents():
 	elif key == curses.KEY_UP:
 		player.y -= 1
 		if player.y <= -1:
+			player.y += 1
 			if page != checkPlayerPage(0):
-				player.y += 1
+				
 				player.y = height-1
 				page = checkPlayerPage(0)
 				return
