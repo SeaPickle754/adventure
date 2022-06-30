@@ -1,4 +1,5 @@
 import curses
+from tabnanny import check
 from miscclasses import *
 import random
 
@@ -173,12 +174,10 @@ def doEvents():
 	elif key == curses.KEY_UP:
 		player.y -= 1
 		if player.y <= -1:
-			npage = checkPlayerPage(0)
-			if npage == page:
+			if page != checkPlayerPage(0):
 				player.y += 1
-			else:
 				player.y = height-1
-				page = npage
+				page = checkPlayerPage(0)
 				return
 		if isNonPassable():
 			player.y += 1
@@ -188,7 +187,10 @@ def doEvents():
 		
 		if player.y >= height:
 			player.y -= 1
-			page = checkPlayerPage(2)
+			if page != checkPlayerPage(2):
+				page = checkPlayerPage(2)
+				player.y = 0
+				return
 		if isNonPassable():
 			player.y -= 1
 	
@@ -197,14 +199,20 @@ def doEvents():
 		
 		if player.x <= -1:
 			player.x += 1
-			page = checkPlayerPage(1)
+			if page != checkPlayerPage(1):
+				page = checkPlayerPage(1)
+				player.x = width - 1
+				return
 		if isNonPassable():
 			player.x += 1
 	elif key == curses.KEY_RIGHT:
 		player.x += 1
 		if player.x >= width:
 			player.x -= 1
-			page = checkPlayerPage(3)
+			if page != checkPlayerPage(3):
+				page = checkPlayerPage(3)
+				player.x = 0
+				return
 		if isNonPassable():
 			player.x -= 1
 	return
