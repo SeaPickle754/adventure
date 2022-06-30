@@ -26,7 +26,7 @@ def initMap():
 	global Map
 	Map = list()
 	# Must be a perfect square
-	for i in range(0, 8):
+	for i in range(0, 9):
 		Map.append([]) # append a page
 		for y in range(0, height):
 			Map[i].append([]) #append a y-axis
