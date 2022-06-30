@@ -8,7 +8,9 @@ screen = curses.initscr()
 #curses.noecho()
 screen.keypad(True)
 curses.cbreak()
+nonPassables = [1]
 Map = None
+
 screen.scrollok(0)
 curses.start_color()
 curses.curs_set(0)
@@ -44,7 +46,7 @@ def draw():
 		for x in range(width):
 			if x == player.x and y == player.y:	
 				try:
-					screen.addch(player.y, player.x, "λ", curses.color_pair(2))
+					screen.addch(player.y, player.x, str(player), curses.color_pair(2))
 				except:
 					pass
 			else:
@@ -55,6 +57,10 @@ def draw():
 						screen.addch(y, x, "@")
 				except:
 					pass
+def isNonPassable():
+	if Map[page][player.y][player.x] in nonPassables:
+		return True
+	return False
 def doEvents():
 	key=screen.getch()
 
@@ -67,11 +73,16 @@ def doEvents():
 		player.y -= 1
 		if player.y <= -1:
 			player.y += 1
+		if isNonPassable():
+			player.y += 1
 
 	elif key == curses.KEY_DOWN:
 		player.y += 1
 		
 		if player.y >= height:
+			player.y -= 1
+
+		if isNonPassable():
 			player.y -= 1
 	
 	elif key == curses.KEY_LEFT:
@@ -79,9 +90,13 @@ def doEvents():
 		
 		if player.x <= -1:
 			player.x += 1
+		if isNonPassable():
+			player.x += 1
 	elif key == curses.KEY_RIGHT:
 		player.x += 1
 		if player.x >= width:
+			player.x -= 1
+		if isNonPassable():
 			player.x -= 1
 	return
 initMap()
