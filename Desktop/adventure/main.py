@@ -62,12 +62,17 @@ def isNonPassable():
 		return True
 	return False
 def doEvents():
+	global page
 	key=screen.getch()
 
 	if key == ord('q'):
 		endApp()
 	elif key == ord('a'):
 		initMap()
+	elif key == ord('s'):
+		page += 1
+		if page == 8:
+			page = 0
 
 	elif key == curses.KEY_UP:
 		player.y -= 1
