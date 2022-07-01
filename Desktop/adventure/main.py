@@ -17,11 +17,12 @@ curses.curs_set(0)
 page = 0
 player = Player()
 height, width = screen.getmaxyx()
-
+logo = "LOGO HERE LOL IT CAN BE ASCII ART"
 curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
 curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
 screen.addstr(height//2, width//2, "Press any key to start.")
+screen.addstr(height//3, width//2, logo)
 def initMap():
 	global Map
 	Map = list()
@@ -31,11 +32,32 @@ def initMap():
 		for y in range(0, height):
 			Map[i].append([]) #append a y-axis
 			for x in range(0, width):
-				struct = random.randint(0, 150)
+				struct = random.randint(0, 2000)
 				if struct == 0:
 					Map[i][y].append(1)
 				elif struct == 1:
 					Map[i][y].append(2)
+				elif struct == 2 and y > 5:
+					Map[i][y-5][x] = 1
+					Map[i][y-4][x] = 1
+					Map[i][y-3][x] = 1
+					Map[i][y-2][x] = 1
+					Map[i][y-1][x] = 1
+					Map[i][y].append(1)
+					
+					Map[i][y][x-5] = 1
+					Map[i][y][x-4] = 1
+					Map[i][y][x-3] = 1
+					Map[i][y][x-2] = 1
+					Map[i][y][x-1] = 1
+					Map[i][y].append(1)
+					
+					Map[i][y-5][x-5] = 1
+					Map[i][y-4][x-4] = 1
+					Map[i][y-3][x-3] = 1
+					Map[i][y-2][x-2] = 1
+					Map[i][y-1][x-1] = 1
+					Map[i][y].append(1)
 				else:
 					Map[i][y].append(0)
 
