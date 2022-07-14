@@ -40,9 +40,9 @@ def initMap():
 					Map[i][y].append(2)
 				elif struct == 2:
 					try:
-						for j in range(1, 10):
-							Map[i][y-j][x] = 2
-						
+						for j in range(0, 3):
+							for k in range(1, 4):
+								Map[i][y-j][x-k] = 2
 					except:
 						Map[i][y].append(0)
 				else:
