@@ -16,6 +16,7 @@ curses.start_color()
 curses.curs_set(0)
 page = 0
 player = Player()
+screen.refresh()
 height, width = screen.getmaxyx()
 logo = "LOGO HERE LOL IT CAN BE ASCII ART"
 curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
@@ -32,32 +33,18 @@ def initMap():
 		for y in range(0, height):
 			Map[i].append([]) #append a y-axis
 			for x in range(0, width):
-				struct = random.randint(0, 2000)
+				struct = random.randint(0, 150)
 				if struct == 0:
 					Map[i][y].append(1)
 				elif struct == 1:
 					Map[i][y].append(2)
-				elif struct == 2 and y > 5:
-					Map[i][y-5][x] = 1
-					Map[i][y-4][x] = 1
-					Map[i][y-3][x] = 1
-					Map[i][y-2][x] = 1
-					Map[i][y-1][x] = 1
-					Map[i][y].append(1)
-					
-					Map[i][y][x-5] = 1
-					Map[i][y][x-4] = 1
-					Map[i][y][x-3] = 1
-					Map[i][y][x-2] = 1
-					Map[i][y][x-1] = 1
-					Map[i][y].append(1)
-					
-					Map[i][y-5][x-5] = 1
-					Map[i][y-4][x-4] = 1
-					Map[i][y-3][x-3] = 1
-					Map[i][y-2][x-2] = 1
-					Map[i][y-1][x-1] = 1
-					Map[i][y].append(1)
+				elif struct == 2:
+					try:
+						for j in range(1, 10):
+							Map[i][y-j][x] = 2
+						
+					except:
+						Map[i][y].append(0)
 				else:
 					Map[i][y].append(0)
 
@@ -85,7 +72,7 @@ def draw():
 					elif Map[page][y][x] == 1:
 						screen.addch(y, x, "@")
 					elif Map[page][y][x] == 2:
-						screen.addch(y, x, "#", curses.A_UNDERLINE)
+						screen.addch(y, x, "#")
 				except:
 					pass
 def isNonPassable():
