@@ -9,21 +9,30 @@ screen = curses.initscr()
 #curses.noecho()
 screen.keypad(True)
 curses.cbreak()
-nonPassables = [1]
+nonPassables = [1, 3]
 Map = None
 
 curses.start_color()
 curses.curs_set(0)
 page = 0
 player = Player()
+playerchr = str(player)
 screen.refresh()
 height, width = screen.getmaxyx()
-logo = "LOGO HERE LOL IT CAN BE ASCII ART"
+logo = "                                           \n"
+logo += "                _                 _                  \n"
+logo += "       /\\      | |               | |                   \n"
+logo += "      /  \\   __| |_   _____ _ __ | |_ _   _ _ __ ___  \n"
+logo += "     / /\\ \\ / _` \\ \\ / / _ \\ '_ \\| __| | | | '__/ _ \\  \n"
+logo += "    / ____ \\ (_| |\\ V /  __/ | | | |_| |_| | | |  __/\n"
+logo += "   /_/    \\_\\__,_| \\_/ \\___|_| |_|\\__|\\__,_|_|  \\___|\n"
+
 curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
 curses.init_pair(2, curses.COLOR_CYAN, curses.COLOR_BLACK)
+curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
 
 screen.addstr(height//2, width//2, "Press any key to start.")
-screen.addstr(height//3, width//2, logo)
+screen.addstr(height//3, width//5, logo)
 def initMap():
 	global Map
 	Map = list()
@@ -38,11 +47,11 @@ def initMap():
 					Map[i][y].append(1)
 				elif struct == 1:
 					Map[i][y].append(2)
-				elif struct == 2:
+				elif struct == 2 and random.randint(0, 150) == 2:
 					try:
-						for j in range(0, 3):
-							for k in range(1, 4):
-								Map[i][y-j][x-k] = 2
+						for j in range(0, 10):
+							for k in range(1, 21):
+								Map[i][y-j][x-k] = 3
 					except:
 						Map[i][y].append(0)
 				else:
@@ -62,7 +71,7 @@ def draw():
 		for x in range(width):
 			if x == player.x and y == player.y:	
 				try:
-					screen.addch(player.y, player.x, str(player), curses.color_pair(2))
+					screen.addch(player.y, player.x, playerchr, curses.color_pair(2))
 				except:
 					pass
 			else:
@@ -73,6 +82,8 @@ def draw():
 						screen.addch(y, x, "@")
 					elif Map[page][y][x] == 2:
 						screen.addch(y, x, "#")
+					elif Map[page][y][x] == 3:
+						screen.addch(y, x, "~", curses.color_pair(3))
 				except:
 					pass
 def isNonPassable():
